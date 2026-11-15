@@ -6,8 +6,8 @@
 
 // TASK DATA
 // TASK DATA
-const API_URL = "http://localhost:5000/api/tasks";
-const WORKERS_API_URL = "http://localhost:5000/api/workers";
+const API_URL = "https://taskflow-backend-0nxf.onrender.com/api/tasks";
+const WORKERS_API_URL = "https://taskflow-backend-0nxf.onrender.com/api/workers";
 let tasks = [];
 let taskCounter = 1;
 let queueTimer = null;
