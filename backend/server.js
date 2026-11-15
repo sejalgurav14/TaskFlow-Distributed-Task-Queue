@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const pool = require("./db");
 const taskRoutes = require("./taskRoutes");
-require("./worker");
+require("./taskWorker");
 
 const app = express();
 
