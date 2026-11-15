@@ -122,7 +122,7 @@ if (startResult.rows.length === 0) {
             // Simulate task processing
 for (let progress = 10; progress <= 100; progress += 10) {
 
-    await delay(2000);
+    await delay(4000);
 
     // Check whether the task was manually failed
     const statusResult = await pool.query(
