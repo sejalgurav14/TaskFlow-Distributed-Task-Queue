@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Distributed Task Queue</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-icon">T</span>
+                <span>TaskFlow</span>
+            </div>
+
+            <p class="menu-label">WORKSPACE</p>
+
+            <nav>
+                <a href="#" class="nav-link active">▦ Dashboard</a>
+                <a href="#" class="nav-link">▤ Tasks</a>
+                <a href="#" class="nav-link">◈ Workers</a>
+                <a href="#analytics" class="nav-link">▥ Analytics</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <span class="status-dot"></span>
+                <span>System Operational</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">DISTRIBUTED SYSTEMS</p>
+                    <h1>System Dashboard</h1>
+                </div>
+
+                <button class="primary-button" id="newTaskButton">
+                    + New Task
+                </button>
+            </header>
+
+            <section class="welcome-section">
+                <div>
+                    <h2>Task Overview</h2>
+                    <p>Monitor your background jobs and worker activity.</p>
+                </div>
+
+                <span class="system-badge">
+                    <span class="status-dot"></span>
+                    All systems operational
+                </span>
+            </section>
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <p>Total Tasks</p>
+                    <h2 id="totalTasks">0</h2>
+                    <span>All submitted jobs</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Pending</p>
+                    <h2 id="pendingTasks">0</h2>
+                    <span>Waiting in queue</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Running</p>
+                    <h2 id="runningTasks">0</h2>
+                    <span>Currently processing</span>
+                </div>
+
+                <div class="stat-card">
+                    <p>Completed</p>
+                    <h2 id="completedTasks">0</h2>
+                    <span>Successfully processed</span>
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+
+                <div class="panel" id="tasks">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Recent Tasks</h3>
+                            <p>Latest background jobs</p>
+                        </div>
+
+                        <button class="text-button" id="viewAllButton">
+                            View all
+                        </button>
+                    </div>
+
+                    
+<div class="task-filters">
+
+    <input
+        type="text"
+        id="taskSearch"
+        placeholder="Search tasks..."
+    >
+
+    <select id="statusFilter">
+        <option value="All">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Running">Running</option>
+        <option value="Completed">Completed</option>
+        <option value="Failed">Failed</option>
+    </select>
+
+    <select id="priorityFilter">
+        <option value="All">All Priorities</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+
+</div>
+
+                    
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Worker</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="taskTableBody">
+            <tr>
+                <td colspan="5" class="empty-state">
+                    No tasks yet. Create your first task.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+                <div class="panel worker-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Worker Status</h3>
+                            <p>Background processing nodes</p>
+                        </div>
+                    </div>
+
+                    <div class="worker-list">
+
+                        <div class="worker-item" data-worker="1">
+                           <div class="worker-icon">W1</div>
+                           <div class="worker-info">
+                             <strong>Worker 01</strong>
+                             <p>Primary worker</p>
+                             <small>Waiting for tasks</small>
+                        </div>
+                        <span class="worker-status">Idle</span>
+                    </div>
+
+                        <div class="worker-item" data-worker="2">
+    <div class="worker-icon">W2</div>
+
+    <div class="worker-info">
+        <strong>Worker 02</strong>
+        <p>Primary worker</p>
+        <small>Waiting for tasks</small>
+    </div>
+
+    <span class="worker-status">Idle</span>
+</div>
+
+                        <div class="worker-item" data-worker="3">
+    <div class="worker-icon">W3</div>
+
+    <div class="worker-info">
+        <strong>Worker 03</strong>
+        <p>Primary worker</p>
+        <small>Waiting for tasks</small>
+    </div>
+
+    <span class="worker-status">Idle</span>
+</div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            
+<!-- Analytics Dashboard -->
+
+<!-- RECENT SYSTEM ACTIVITY -->
+<section class="panel activity-panel" id="activity">
+
+    <div class="panel-header">
+        <div>
+            <p class="eyebrow">SYSTEM MONITORING</p>
+            <h3>Recent Activity</h3>
+            <p>Live updates from your distributed workers</p>
+        </div>
+
+        <span class="chart-label">LIVE FEED</span>
+    </div>
+
+    <div id="activityFeed" class="activity-feed">
+        <p class="empty-message">No activity yet.</p>
+    </div>
+
+</section>
+
+<section class="analytics-section" id="analytics">
+
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">SYSTEM INSIGHTS</p>
+            <h2>Analytics Overview</h2>
+            <p>Track task performance and worker efficiency.</p>
+        </div>
+    </div>
+
+    <!-- Analytics Statistics -->
+    <div class="stats-grid analytics-stats">
+
+        <div class="stat-card">
+            <p>Failed Tasks</p>
+            <h2 id="analyticsFailed">0</h2>
+            <span>Tasks that need attention</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Success Rate</p>
+            <h2 id="successRate">0%</h2>
+            <span>Successfully completed tasks</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Worker Utilization</p>
+            <h2 id="workerUtilization">0%</h2>
+            <span>Workers currently active</span>
+        </div>
+
+    </div>
+
+    <!-- Task Throughput Graph -->
+    <div class="analytics-grid">
+
+        <div class="panel analytics-panel throughput-panel">
+            <div class="panel-header">
+                <div>
+                    <h3>Task Throughput</h3>
+                    <p>Completed tasks over time</p>
+                </div>
+                <span class="chart-label">LIVE ANALYTICS</span>
+            </div>
+
+            <div class="graph-container">
+                <canvas id="throughputChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Task Distribution Graph -->
+        <div class="panel analytics-panel distribution-panel">
+            <div class="panel-header">
+                <div>
+                    <h3>Task Distribution</h3>
+                    <p>Overview of all task statuses</p>
+                </div>
+            </div>
+
+            <div class="graph-container doughnut-container">
+                <canvas id="taskDistributionChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Worker Performance Graph -->
+    <div class="panel analytics-panel worker-performance-panel">
+
+        <div class="panel-header">
+            <div>
+                <h3>Worker Performance</h3>
+                <p>Tasks completed by each worker</p>
+            </div>
+        </div>
+
+        <div class="graph-container worker-graph-container">
+            <canvas id="workerPerformanceChart"></canvas>
+        </div>
+        <div id="workerPerformanceSummary" class="worker-performance-summary">
+</div>
+
+    </div>
+
+</section>
+
+
+            <footer>
+                TaskFlow · Distributed Task Queue System
+            </footer>
+<!-- New Task Modal -->
+<div class="modal-overlay" id="taskModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <div>
+                <h2>Create New Task</h2>
+                <p>Add a background job to the queue.</p>
+            </div>
+
+            <button class="close-button" id="closeModal">&times;</button>
+        </div>
+
+        <form id="taskForm">
+
+            <label for="taskName">Task Name</label>
+            <input
+                type="text"
+                id="taskName"
+                placeholder="e.g. Generate PDF Report"
+                required
+            >
+
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-button" id="cancelTask">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-button">
+                    Submit Task
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Task Details Modal -->
+<div class="modal-overlay" id="detailsModal">
+
+    <div class="modal task-details-content">
+
+        <div class="modal-header">
+            <div>
+                <h2>Task Details</h2>
+                <p>View task information and execution history.</p>
+            </div>
+
+            <button class="close-button" id="closeDetailsModal">&times;</button>
+        </div>
+
+        <div class="detail-row">
+            <strong>Task ID:</strong>
+            <span id="detailTaskId">-</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Task Name:</strong>
+            <span id="detailTaskName">-</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Priority:</strong>
+            <span id="detailPriority">-</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Status:</strong>
+            <span id="detailStatus">-</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Worker:</strong>
+            <span id="detailWorker">-</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Retry Count:</strong>
+            <span id="detailRetries">0</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Submitted At:</strong>
+            <span id="detailSubmitted">-</span>
+        </div>
+
+        <div class="history-section">
+            <h3>Task History</h3>
+            <div id="taskHistory"></div>
+        </div>
+
+    </div>
+</div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
