@@ -3,11 +3,30 @@ require("dotenv").config();
 
 const IORedis = require("ioredis");
 
-const redisConnection = new IORedis({
-    host: process.env.REDIS_HOST || "127.0.0.1",
-    port: Number(process.env.REDIS_PORT) || 6379,
-    maxRetriesPerRequest: null
-});
+let redisConfig;
+
+const redisHost = process.env.REDIS_HOST || "127.0.0.1";
+
+if (redisHost.startsWith("redis://") || redisHost.startsWith("rediss://")) {
+    const redisUrl = new URL(redisHost);
+
+    redisConfig = {
+        host: redisUrl.hostname,
+        port: Number(redisUrl.port) || 6379,
+        username: redisUrl.username || undefined,
+        password: redisUrl.password || undefined,
+        tls: redisUrl.protocol === "rediss:" ? {} : undefined,
+        maxRetriesPerRequest: null
+    };
+} else {
+    redisConfig = {
+        host: redisHost,
+        port: Number(process.env.REDIS_PORT) || 6379,
+        maxRetriesPerRequest: null
+    };
+}
+
+const redisConnection = new IORedis(redisConfig);
 
 redisConnection.on("connect", () => {
     console.log("Redis connected successfully!");
